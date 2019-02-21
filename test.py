@@ -1,10 +1,52 @@
 from bitcoinlib import * 
+from bitcoinlib.wallets import *
 
-w = wallets.wallet_create_or_open_multisig('Wallet1',None)
-l = wallets.wallets_list()
 
-print(w.get_key().address , w.get_key().wif , w.get_key())
-print(l)
+wavseAdr='asasasadsdsdsdsdfsdgtrhrytyj'
+
+
+walletList = wallets_list()
+# print(len(l))
+lnames =[ walletList[i]['name'] for i in range(len(walletList)) ]
+
+# print( DbWallet() )
+
+if wavseAdr in lnames :
+
+	w = HDWallet(wavseAdr)
+	# print(w.info())
+	print(w.get_key().address)
+	print({'key_private': w.get_key().dict()['key_private'] ,'key_public': w.get_key().dict()['key_public']})
+	# print(w.dict()['key_public'])
+	# print(lnames.index(wavseAdr))
+else : 
+
+	w = HDWallet.create( wavseAdr ,  network='testnet')
+	print(w.get_key().address)
+	print({'key_private': w.get_key().dict()['key_private'] ,'key_public': w.get_key().dict()['key_public']})
+
+
+
+# res = wallet_delete('Wallet1', force=True)
+
+# l = wallets.wallets_list()
+
+# w = HDWallet.create('MyWallet')
+
+# print(w.get_key())
+# print(get_key())
+
+# print(w.info())
+print()
+
+# print(l)
+print()
+
+# print( w.get_key().wif )
+print()
+
+# print(w.get_key())
+print()
 
 
 ############################ Handler ###############################
