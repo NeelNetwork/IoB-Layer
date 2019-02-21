@@ -1,29 +1,41 @@
 from bitcoinlib import * 
 from bitcoinlib.wallets import *
+import base58
 
 
-wavseAdr='asasasadsdsdsdsdfsdgtrhrytyj'
+wavseAdr='asasasadsdsdsdsdfsdgtrhrytyjj'
 
 
-walletList = wallets_list()
-# print(len(l))
-lnames =[ walletList[i]['name'] for i in range(len(walletList)) ]
+# walletList = wallets_list()
+# # print(len(l))
+# lnames =[ walletList[i]['name'] for i in range(len(walletList)) ]
 
-# print( DbWallet() )
+# # print( DbWallet() )
 
-if wavseAdr in lnames :
+# if wavseAdr in lnames :
 
-	w = HDWallet(wavseAdr)
-	# print(w.info())
-	print(w.get_key().address)
-	print({'key_private': w.get_key().dict()['key_private'] ,'key_public': w.get_key().dict()['key_public']})
+w = wallet_create_or_open(wavseAdr ,encoding='base58' ,network='testnet')
+print(len(w.get_keys()))
+key = w.get_key(0)
+print(key.key().dict())
+publkey = bytes.fromhex( key.dict()['key_public'] )
+privkey = bytes.fromhex( key.dict()['key_private'] )
+# print(publkey)
+print({'key_private': base58.b58encode(privkey) ,'key_public': base58.b58encode(publkey)})
+print(key.address)
+
+#adr = 
+
+# print(w.deserialize_address(key.address,'base58'))
+
+
 	# print(w.dict()['key_public'])
 	# print(lnames.index(wavseAdr))
-else : 
+# else : 
 
-	w = HDWallet.create( wavseAdr ,  network='testnet')
-	print(w.get_key().address)
-	print({'key_private': w.get_key().dict()['key_private'] ,'key_public': w.get_key().dict()['key_public']})
+# 	w = HDWallet.create( wavseAdr ,encoding='base58' ,network='testnet')
+# 	print(w.get_key().address)
+# 	print({'key_private': w.get_key().dict()['key_private'] ,'key_public': w.get_key().dict()['key_public']})
 
 
 
