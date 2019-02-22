@@ -19,15 +19,17 @@ class BTC(object):
 		serializedWallet = newWallet.serialize()
 		newAddress = newWallet.to_address()
 
-		BTCWallet = create_wallet_from_address(wallet_name=WavesAddress, address=newAddress, api_key=APIKEY)
+		BTCWallet = create_wallet_from_address(wallet_name=WavesAddress, address=newAddress, api_key=self.APIKEY)
 		#TODO SAVE WAVESAddress , serializeWlt in DB
+		print(BTCWallet)
 		con = lite.connect('test.db')
 		with con:
 			cur = con.cursor()
 			cur.execute("CREATE TABLE IF NOT EXISTS addresses(WavesAddress TEXT , serializedWallet TEXT , BTCaddress TEXT)")
-			cur.execute("INSERT INTO addresses VALUES(?,?,?)",(WavesAddress,serializedWallet,BTCWallet['addresses'][0]))
+			cur.execute("""INSERT INTO addresses VALUES(?,?,?)"""
+						,(WavesAddress,serializedWallet,BTCWallet['addresses'][0]))
 			con.commit()
-			con.close()
+			# con.close()
 
 
 		return {'addresses' : BTCWallet['addresses'][0] }
@@ -46,6 +48,22 @@ class BTC(object):
 
 
 	def VerifyWallet(self,WavesAddress):
+
+		con = lite.connect('test.db')
+		with con:
+			cur = con.cursor()
+			# cur.execute("CREATE TABLE IF NOT EXISTS addresses(WavesAddress TEXT , serializedWallet TEXT , BTCaddress TEXT)")
+			cur.execute("""SELECT WavesAddress , serializedWallet , BTCaddress FROM addresses WHERE WavesAddress=:adr""",  {"adr": WavesAddress})
+			con.commit()
+
+			row = cur.fetchone()
+			if row :
+				_wallet = get_wallet_addresses(wallet_name=WavesAddress, api_key=self.APIKEY)
+				details = get_address_details(_wallet['addresses'][0])
+				print(details)
+				tx_hash = details['txrefs'][0]['tx_hash']
+				# print(tx_hash)
+				return details
 		pass
 
 
@@ -69,7 +87,7 @@ class BTC(object):
 
 
 		# walletList = wallets_list()
-     	# print(len(l))
+		# print(len(l))
 		# lnames =[ walletList[i]['name'] for i in range(len(walletList)) ]
 		# if wavseAdr in lnames :
 		# 	w = HDWallet(wavseAdr)
@@ -83,5 +101,4 @@ class BTC(object):
 		# 	w = HDWallet.create( wavseAdr ,  network='testnet')
 		# 	print(w.get_key().address)
 		# 	return {'address' : w.get_key().address }
-
-		# 	# print({'key_private': w.get_key().dict()['key_private'] ,'key_public': w.get_key().dict()['key_public']})
+		# print({'key_private': w.get_key().dict()['key_private'] ,'key_public': w.get_key().dict()['key_public']})
