@@ -4,6 +4,74 @@ APIKEY = '17536ffbfb674825838e33b77deeec9f'
 
 import sqlite3 as lite
 
+res ={
+    "address": "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD", 
+    "balance": 4433416, 
+    "final_balance": 4433416, 
+    "final_n_tx": 7, 
+    "n_tx": 7, 
+    "total_received": 4433416, 
+    "total_sent": 0, 
+    "tx_url": "https://api.blockcypher.com/v1/btc/main/txs/", 
+    "txrefs": [
+        {
+            "block_height": 302013, 
+            "confirmations": 77809, 
+            "confirmed": "datetime.datetime(2014, 5, 22, 3, 46, 25, 0, tzinfo=tzutc())", 
+            "double_spend": False, 
+            "ref_balance": 4433416, 
+            "spent": False, 
+            "tx_hash": "14b1052855bbf6561bc4db8aa501762e7cc1e86994dda9e782a6b73b1ce0dc1e", 
+            "tx_input_n": -1, 
+            "tx_output_n": 0, 
+            "value": 20213
+        }, 
+        {
+            "block_height": 302002, 
+            "confirmations": 77820, 
+            "confirmed": "datetime.datetime(2014, 5, 22, 2, 56, 8, 0, tzinfo=tzutc())", 
+            "double_spend": False, 
+            "ref_balance": 4413203, 
+            "spent": False, 
+            "tx_hash": "4cff011ec53022f2ae47197d1a2fd4a6ac2a80139f4d0131c1fed625ed5dc869", 
+            "tx_input_n": -1, 
+            "tx_output_n": 0, 
+            "value": 40596
+        }, 
+        ...
+
+    ], 
+    "unconfirmed_balance": 0, 
+    "unconfirmed_n_tx": 0, 
+    "unconfirmed_txrefs": []
+}
+
+
+txrefs = res['txrefs']
+# print(len(txrefs))
+if len(txrefs) == 0 :
+    # return {"result" : "not exist any transaction"} 
+    pass
+else :
+    tx_hash = txrefs[0]['tx_hash']                  #TODO should be check transaction time
+    transaction_details = get_transaction_details(tx_hash)
+    print(transaction_details)
+    receive_count = transaction_details['receive_count']
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################################################################################################################
 
 # newWallet = Wallet.new_random_wallet()
 # # private_key_hex = newWallet.get_private_key_hex()
@@ -12,7 +80,7 @@ import sqlite3 as lite
 # newAddress = newWallet.to_address()
 # print(serializeWlt)
 #TODO SAVE WAVESAddress , serializeWlt in DB
-
+'''
 _wallet = get_wallet_addresses(wallet_name="WavesAddressTEST1", api_key=APIKEY)
 print(_wallet)
 con = lite.connect('test.db')
@@ -27,7 +95,7 @@ with con:
     print(row[1])
     print(row[2])
     # con.close()
-
+'''
 # trande = {
 #     "addresses": [
 #         "13XXaBufpMvqRqLkyDty1AXqueZHVe6iyy", 

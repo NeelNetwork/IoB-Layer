@@ -53,18 +53,26 @@ class BTC(object):
 		with con:
 			cur = con.cursor()
 			# cur.execute("CREATE TABLE IF NOT EXISTS addresses(WavesAddress TEXT , serializedWallet TEXT , BTCaddress TEXT)")
-			cur.execute("""SELECT WavesAddress , serializedWallet , BTCaddress FROM addresses WHERE WavesAddress=:adr""",  {"adr": WavesAddress})
+			cur.execute("""SELECT WavesAddress , serializedWallet , BTCaddress 
+							FROM addresses WHERE WavesAddress=:adr""",  {"adr": WavesAddress})
 			con.commit()
 
 			row = cur.fetchone()
 			if row :
 				_wallet = get_wallet_addresses(wallet_name=WavesAddress, api_key=self.APIKEY)
 				details = get_address_details(_wallet['addresses'][0])
-				print(details)
-				tx_hash = details['txrefs'][0]['tx_hash']
+				# print(details)
+				txrefs = details['txrefs']
+				# print(len(txrefs))
+				if len(txrefs) == 0 :
+					return {"result" : "not exist any transaction"} 
+				else :
+					tx_hash = txrefs[0]['tx_hash']					#TODO should be check transaction time
+					transaction_details = get_transaction_details(tx_hash)
+					receive_count = transaction_details['receive_count']
 				# print(tx_hash)
-				return details
-		pass
+				return {'receive_count' : receive_count}
+		return None
 
 
 
