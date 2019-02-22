@@ -1,27 +1,38 @@
 # from bitcoinlib import *
 from bitmerchant.wallet import Wallet
 from blockcypher import create_wallet_from_address,get_address_details,get_wallet_addresses,get_transaction_details
+import sqlite3 as lite
 
 
 
 class BTC(object):
-	network = 'testnet'
+	# network = 'testnet'
 	APIKEY = '17536ffbfb674825838e33b77deeec9f'
 
-    def CreateWallet(self,WavesAddress):
 
-    	newWallet = Wallet.new_random_wallet()
-    	# private_key_hex = newWallet.get_private_key_hex()
-    	# public_key_hex = newWallet.get_public_key_hex()
 
-    	serializeWlt = newWallet.serialize()
-    	newAddress = newWallet.to_address()
-		#TODO SAVE WAVESAddress , serializeWlt in DB
+	def CreateWallet(self,WavesAddress):
+
+		newWallet = Wallet.new_random_wallet()
+		# private_key_hex = newWallet.get_private_key_hex()
+		# public_key_hex = newWallet.get_public_key_hex()
+		serializedWallet = newWallet.serialize()
+		newAddress = newWallet.to_address()
+
 		BTCWallet = create_wallet_from_address(wallet_name=WavesAddress, address=newAddress, api_key=APIKEY)
+		#TODO SAVE WAVESAddress , serializeWlt in DB
+		con = lite.connect('test.db')
+		with con:
+			cur = con.cursor()
+			cur.execute("CREATE TABLE IF NOT EXISTS addresses(WavesAddress TEXT , serializedWallet TEXT , BTCaddress TEXT)")
+			cur.execute("INSERT INTO addresses VALUES(?,?,?)",(WavesAddress,serializedWallet,BTCWallet['addresses'][0]))
+			con.commit()
+			con.close()
+
 
 		return {'addresses' : BTCWallet['addresses'][0] }
 
-  		# w = wallet_create_or_open(WavesAddress ,encoding='base58' ,network=self.network)
+		# w = wallet_create_or_open(WavesAddress ,encoding='base58' ,network=self.network)
 		# # print(len(w.get_keys()))
 		# key = w.get_key(0)
 		# # print(key.key().dict())
@@ -35,8 +46,9 @@ class BTC(object):
 
 
 	def VerifyWallet(self,WavesAddress):
+		pass
 
-		
+
 
 
 
@@ -73,6 +85,3 @@ class BTC(object):
 		# 	return {'address' : w.get_key().address }
 
 		# 	# print({'key_private': w.get_key().dict()['key_private'] ,'key_public': w.get_key().dict()['key_public']})
-
-
-		
