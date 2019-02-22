@@ -6,18 +6,18 @@ from blockcypher import create_wallet_from_address,get_address_details,get_walle
 
 class BTC(object):
 	network = 'testnet'
-	APIKEY = ''
+	APIKEY = '17536ffbfb674825838e33b77deeec9f'
 
     def createWallet(self,WavesAddress):
+
     	newWallet = Wallet.new_random_wallet()
-		# private_key_hex = newWallet.get_private_key_hex()
-		# public_key_hex = newWallet.get_public_key_hex()
-		serializeWlt = newWallet.serialize()
-		newAddress = newWallet.to_address()
+    	# private_key_hex = newWallet.get_private_key_hex()
+    	# public_key_hex = newWallet.get_public_key_hex()
+
+    	serializeWlt = newWallet.serialize()
+    	newAddress = newWallet.to_address()
 		#TODO SAVE WAVESAddress , serializeWlt in DB
-
 		BTCWallet = create_wallet_from_address(wallet_name=WavesAddress, address=newAddress, api_key=APIKEY)
-
 
 		return {'addresses' : BTCWallet['addresses'][0] }
 
@@ -43,15 +43,12 @@ class BTC(object):
 		transaction_details = get_transaction_details(tx_hash)
 
 
-		
-
-
 		return { None }
 
 
 
 		# walletList = wallets_list()
-  #   	# print(len(l))
+     	# print(len(l))
 		# lnames =[ walletList[i]['name'] for i in range(len(walletList)) ]
 		# if wavseAdr in lnames :
 		# 	w = HDWallet(wavseAdr)
