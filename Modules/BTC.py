@@ -8,7 +8,7 @@ class BTC(object):
 	network = 'testnet'
 	APIKEY = '17536ffbfb674825838e33b77deeec9f'
 
-    def createWallet(self,WavesAddress):
+    def CreateWallet(self,WavesAddress):
 
     	newWallet = Wallet.new_random_wallet()
     	# private_key_hex = newWallet.get_private_key_hex()
@@ -33,6 +33,13 @@ class BTC(object):
 		# return {'address' : key.address }
 
 
+
+	def VerifyWallet(self,WavesAddress):
+
+		
+
+
+
 	def CheckTransaction(self,WavesAddress) :
 		serializeWlt = None
 		#TODO read serializeWlt from DB
@@ -44,6 +51,8 @@ class BTC(object):
 
 
 		return { None }
+
+
 
 
 
