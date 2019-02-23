@@ -7,7 +7,6 @@ import pywaves
 
 import ModuleHandler 
 
-WAVES = pywaves.Address(address="" , privateKey="")
 app = Flask(__name__)
 
 
@@ -46,10 +45,6 @@ def VerifyEntry():
 	WavesAddress = request.json['WavesAddress']
 	coin = ModuleHandler.str_to_class('Modules.'+Type, Type)
 	res = coin.VerifyWallet(WavesAddress)
-	recipient = pywaves.Address(address=WavesAddress)
-	BTC = pywaves.Asset('8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS')
-    WAVES.sendAsset(recipient,BTC,res)
-
 	print(res)
 	response = app.response_class(
         response=json.dumps(res),

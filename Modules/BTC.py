@@ -70,8 +70,13 @@ class BTC(object):
 					tx_hash = txrefs[0]['tx_hash']					#TODO should be check transaction time
 					transaction_details = get_transaction_details(tx_hash)
 					receive_count = transaction_details['receive_count']
-				# print(tx_hash)
-				return {'receive_count' : receive_count}
+					# print(tx_hash)
+					recipient = pywaves.Address(address=WavesAddress)
+					BTC = pywaves.Asset('8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS')
+					res = WAVES.sendAsset(recipient,BTC,receive_count)
+				
+				return res
+
 		return None
 
 
@@ -86,7 +91,8 @@ class BTC(object):
 		details = get_address_details(_wallet['addresses'][0])
 		tx_hash = details['txrefs'][0]['tx_hash']
 		transaction_details = get_transaction_details(tx_hash)
-
+		
+		# pyneel.reissueasset(verifywallet())
 
 		return { None }
 
