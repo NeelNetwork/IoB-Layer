@@ -2,6 +2,7 @@
 from bitmerchant.wallet import Wallet
 from blockcypher import create_wallet_from_address,get_address_details,get_wallet_addresses,get_transaction_details
 import sqlite3 as lite
+import pywaves
 
 
 
@@ -30,6 +31,7 @@ class BTC(object):
 						,(WavesAddress,serializedWallet,BTCWallet['addresses'][0]))
 			con.commit()
 			# con.close()
+	
 
 
 		return {'addresses' : BTCWallet['addresses'][0] }
@@ -73,30 +75,41 @@ class BTC(object):
 					# print(tx_hash)
 					recipient = pywaves.Address(address=WavesAddress)
 					BTC = pywaves.Asset('8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS')
-					res = WAVES.sendAsset(recipient,BTC,receive_count)
+					res = self.WAVES.sendAsset(recipient,BTC,receive_count)
 				
 				return res
 
 		return None
+		# TODO 
+		# save bitcoin addresses balance 
 
 
 
 
 
-	def CheckTransaction(self,WavesAddress) :
-		serializeWlt = None
-		#TODO read serializeWlt from DB
-		_wallet = get_wallet_addresses(wallet_name=WavesAddress, api_key=APIKEY)
+	# def CheckTransaction(self,WavesAddress) :
+	# 	serializeWlt = None
+	# 	#TODO read serializeWlt from DB
+	# 	_wallet = get_wallet_addresses(wallet_name=WavesAddress, api_key=APIKEY)
 
-		details = get_address_details(_wallet['addresses'][0])
-		tx_hash = details['txrefs'][0]['tx_hash']
-		transaction_details = get_transaction_details(tx_hash)
+	# 	details = get_address_details(_wallet['addresses'][0])
+	# 	tx_hash = details['txrefs'][0]['tx_hash']
+	# 	transaction_details = get_transaction_details(tx_hash)
 		
-		# pyneel.reissueasset(verifywallet())
+	# 	# pyneel.reissueasset(verifywallet())
 
-		return { None }
+		# return { None }
 
 
+	def settletransaction(self,BTCaddress,amount):
+
+		# todo
+		# select => list btc address privatekey amount 
+		 
+		
+
+
+		pass 
 
 
 

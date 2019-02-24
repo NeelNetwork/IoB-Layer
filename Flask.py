@@ -69,7 +69,7 @@ def SettleTransaction():
     # WavesAddress = request.json['WavesAddress']
 
 	coin = ModuleHandler.str_to_class('Modules.'+Type, Type)
-	res = coin.SettleTransaction(WavesAddress)
+	res = coin.SettleTransaction(BtcAddress)
 
 	print(res)
 	response = app.response_class(
