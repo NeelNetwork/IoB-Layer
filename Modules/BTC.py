@@ -76,14 +76,20 @@ class BTC(object):
 					recipient = pywaves.Address(address=WavesAddress)
 					BTC = pywaves.Asset('8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS')
 					res = self.WAVES.sendAsset(recipient,BTC,receive_count)
+
 				
 				return res
 
+
+		con = lite.connect('test.db')
+
+		with con:
+
+			cur = con.cursor()
+			cur.execute("CREATE TABLE IF NOT EXISTS btcRemind(BTCaddress TEXT , Inventory TEXT ")
+			cur.execute("""INSERT INTO btcRemind VALUES(?,?)""",  (BTCWallet['addresses'][0], receive_count))
+			con.commit()
 		return None
-		# TODO 
-		# save bitcoin addresses balance 
-
-
 
 
 
