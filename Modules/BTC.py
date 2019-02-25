@@ -32,6 +32,7 @@ class BTC(object):
 						,(WavesAddress,serializedWallet,BTCWallet['addresses'][0]))
 			con.commit()
 			# con.close()
+	
 
 
 		return {'addresses' : BTCWallet['addresses'][0] }
@@ -69,15 +70,25 @@ class BTC(object):
 				if len(txrefs) == 0 :
 					return {"result" : "not exist any transaction"} 
 				else :
-					tx_hash = txrefs[0]['tx_hash']					#TODO should be check transaction time
+					tx_hash = txrefs[0]['tx_hash']													#TODO should be check transaction time
 					transaction_details = get_transaction_details(tx_hash)
 					receive_count = transaction_details['receive_count']
 					# print(tx_hash)
 					recipient = pywaves.Address(address=WavesAddress)
-					BTC = pywaves.Asset('8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS')
-					res = self.WAVES.sendAsset(recipient,BTC,receive_count)
+					BTC = pywaves.Asset('8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS')				#todo i dnk?
+					res = self.WAVES.sendAsset(recipient,BTC,receive_count)							#todo what response
+
+
+					con = lite.connect('test.db')
+					with con:
+
+						cur = con.cursor()
+						cur.execute("CREATE TABLE IF NOT EXISTS btcRemind(BTCaddress TEXT , Inventory REAL ")
+						cur.execute("""INSERT INTO btcRemind VALUES(?,?)""",  (BTCWallet['addresses'][0], receive_count))
+						con.commit()
 				
 				return res
+
 
 		return None
 
@@ -85,18 +96,26 @@ class BTC(object):
 
 
 
-	def CheckTransaction(self,WavesAddress) :
-		serializeWlt = None
-		#TODO read serializeWlt from DB
-		_wallet = get_wallet_addresses(wallet_name=WavesAddress, api_key=APIKEY)
+	def SettleTransaction(self,BTCaddress,amount):
 
-		details = get_address_details(_wallet['addresses'][0])
-		tx_hash = details['txrefs'][0]['tx_hash']
-		transaction_details = get_transaction_details(tx_hash)
-		
-		# pyneel.reissueasset(verifywallet())
+		con = lite.connect('test.db')
+		with con:
+			cur = con.cursor()
+			cur.execute("SELECT MIN(cnt) FROM (SELECT COUNT(*) cnt FROM voting GROUP BY candidate) t;")
+			minimumMigdar = cur.fetchone()
+			cur.execute("""SELECT BTCaddress , Inventory FROM btcRemind 
+							WHERE """)						#TODO change query for get min count 
+			con.commit()
+			rows = cur.fetchall()
 
-		return { None }
+			for  row in rows:
+
+				#TODO do transactioan and check if ok then return {'result' : 'done'} 
+				pass
+
+
+
+		return res
 
 
 
@@ -118,3 +137,18 @@ class BTC(object):
 		# 	print(w.get_key().address)
 		# 	return {'address' : w.get_key().address }
 		# print({'key_private': w.get_key().dict()['key_private'] ,'key_public': w.get_key().dict()['key_public']})
+	
+
+
+	# def CheckTransaction(self,WavesAddress) :
+	# 	serializeWlt = None
+	# 	#TODO read serializeWlt from DB
+	# 	_wallet = get_wallet_addresses(wallet_name=WavesAddress, api_key=APIKEY)
+
+	# 	details = get_address_details(_wallet['addresses'][0])
+	# 	tx_hash = details['txrefs'][0]['tx_hash']
+	# 	transaction_details = get_transaction_details(tx_hash)
+		
+	# 	# pyneel.reissueasset(verifywallet())
+
+		# return { None }
