@@ -27,8 +27,8 @@ class BTC(object):
 		con = lite.connect('test.db')
 		with con:
 			cur = con.cursor()
-			cur.execute("CREATE TABLE IF NOT EXISTS addresses(WavesAddress TEXT , serializedWallet TEXT , BTCaddress TEXT)")
-			cur.execute("""INSERT INTO addresses VALUES(?,?,?)"""
+			cur.execute("CREATE TABLE IF NOT EXISTS addresses(WavesAddress TEXT , serializedWallet TEXT , BTCaddress TEXT , Inventory REAL)")
+			cur.execute("""INSERT INTO addresses VALUES(?,?,?,0)"""
 						,(WavesAddress,serializedWallet,BTCWallet['addresses'][0]))
 			con.commit()
 			# con.close()
@@ -83,7 +83,8 @@ class BTC(object):
 					with con:
 
 						cur = con.cursor()
-						cur.execute("CREATE TABLE IF NOT EXISTS btcRemind(BTCaddress TEXT , Inventory REAL ")
+						# cur.execute("CREATE TABLE IF NOT EXISTS btcRemind(BTCaddress TEXT , Inventory REAL ")
+						# cur.execute("""INSERT INTO btcRemind VALUES(?,?)""",  (BTCWallet['addresses'][0], receive_count))
 						cur.execute("""INSERT INTO btcRemind VALUES(?,?)""",  (BTCWallet['addresses'][0], receive_count))
 						con.commit()
 				
