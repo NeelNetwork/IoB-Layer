@@ -16,6 +16,10 @@ def str_to_class(module_name, class_name) :
         logging.error('Module does not exist')
     return class_ or None
 
+
+
+
+
 def wrapper(api, postData='', host='', headers=''):
     global OFFLINE
     if OFFLINE:
@@ -31,3 +35,34 @@ def wrapper(api, postData='', host='', headers=''):
     else:
         req = requests.get('%s%s' % (host, api), headers=headers).json()
     return req
+
+
+
+
+
+from binascii import hexlify
+b58_digits = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+def encode(b):
+    """Encode bytes to a base58-encoded string"""
+
+    # Convert big-endian bytes to integer
+    n = int('0x0' + hexlify(b).decode('utf8'), 16)
+
+    # Divide that integer into bas58
+    res = []
+    while n > 0:
+        n, r = divmod (n, 58)
+        res.append(b58_digits[r])
+    res = ''.join(res[::-1])
+
+    # Encode leading zeros as base58 zeros
+    import sys
+    czero = b'\x00'
+    if sys.version > '3':
+        # In Python3 indexing a bytes returns numbers, not characters.
+        czero = 0
+    pad = 0
+    for c in b:
+        if c == czero: pad += 1
+        else: break
+    return b58_digits[0] * pad + res

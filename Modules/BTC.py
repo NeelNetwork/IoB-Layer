@@ -117,23 +117,25 @@ class BTC(object):
 			rows = cur.fetchall()
 			cnt = 0
 			remind = amount
-			while amount > 0:
-				serializedWallet = rows[cnt][1]
-				 = rows[cnt][2]
+			while remind > 0:
+				serializedWallet = rows[cnt][1]				#ref to DB structure
+				wallet = Wallet.deserialize(serializedWallet)
 				inv = rows[cnt][3]
 
-				pass
-
-			for  row in rows:
+				if inv >= remind :
+					
+					blockcypher.simple_spend(from_privkey=ModuleHandler.encode( wallet.get_private_key_hex() ) , to_address = BTCaddress , to_satoshis = remind)
+					cur.execute(""" UPDATE addresses SET Inventory = ? WHERE WavesAddress = ? """,  ( inv - remind , WavesAddress ))
 				
-				blockcypher.simple_spend(from_privkey=row["Privatekey"] , to_address = BTCaddress , to_satoshis = amount)
+
+				else :
+
+					blockcypher.simple_spend(from_privkey=ModuleHandler.encode( wallet.get_private_key_hex() ) , to_address = BTCaddress , to_satoshis = inv)
+					remind = remind - inv
+					cur.execute(""" UPDATE addresses SET Inventory = ? WHERE WavesAddress = ? """,  ( 0 , WavesAddress ))
+				con.commit()
+			
 				
-				#TODO do transactioan and check if ok then return {'result' : 'done'} 
-
-				pass
-
-
-update db
 		return res
 
 
