@@ -35,7 +35,7 @@ class BTC(object):
 	
 
 
-		return {'addresses' : BTCWallet['addresses'][0] }
+		return {'addresses' : BTCWallet['addresses'][0] } # public key btc
 
 		# w = wallet_create_or_open(WavesAddress ,encoding='base58' ,network=self.network)
 		# # print(len(w.get_keys()))
@@ -73,22 +73,22 @@ class BTC(object):
 					tx_hash = txrefs[0]['tx_hash']													#TODO should be check transaction time
 					transaction_details = get_transaction_details(tx_hash)
 					receive_count = transaction_details['receive_count']
+
 					# print(tx_hash)
 					recipient = pywaves.Address(address=WavesAddress)
 					BTC = pywaves.Asset('8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS')				#todo i dnk?
 					res = self.WAVES.sendAsset(recipient,BTC,receive_count)							#todo what response
-
+																									#todo dont read serialized? ://
 
 					con = lite.connect('test.db')
 					with con:
-
 						cur = con.cursor()
 						# cur.execute("CREATE TABLE IF NOT EXISTS btcRemind(BTCaddress TEXT , Inventory REAL ")
 						# cur.execute("""INSERT INTO btcRemind VALUES(?,?)""",  (BTCWallet['addresses'][0], receive_count))
-						cur.execute("""INSERT INTO btcRemind VALUES(?,?)""",  (BTCWallet['addresses'][0], receive_count))
+						cur.execute(""" UPDATE addresses SET Inventory = ? WHERE WavesAddress = ? """,  ( receive_count , WavesAddress ))
 						con.commit()
 				
-				return res
+				return res 
 
 
 		return None
@@ -97,17 +97,33 @@ class BTC(object):
 
 
 
-	def SettleTransaction(self,BTCaddress,amount):
+	def SettleTransaction(self,WavesAddress,amount):
+
+
+		#check transaction WavesAddress and WAVES : attchment BTCaddress and verify assetID
+		trnc = ModuleHandler.wrapper("/transactions/address/" + WavesAddress + "/limit/1")
+		BTCaddress = trnc[0][0]['attachment']
+		if BTCaddress == None :
+			return {"result" : "there is not any transaction!" }
+
 
 		con = lite.connect('test.db')
 		with con:
 			cur = con.cursor()
-			cur.execute("SELECT MIN(cnt) FROM (SELECT COUNT(*) cnt FROM voting GROUP BY candidate) t;")
-			minimumMigdar = cur.fetchone()
-			cur.execute("""SELECT BTCaddress , Inventory FROM btcRemind 
-							WHERE """)						#TODO change query for get min count 
+			# cur.execute("SELECT MIN(cnt) FROM (SELECT COUNT(*) cnt FROM voting GROUP BY candidate) t;")
+			# minimumMigdar = cur.fetchone()
+			cur.execute("""SELECT * FROM addresses ORDER BY Inventory DESC """)						#TODO change query for get min count 
 			con.commit()
 			rows = cur.fetchall()
+			cnt = 0
+			remind = amount
+			while amount > 0:
+				serializedWallet = rows[cnt][1]
+				 = rows[cnt][2]
+				inv = rows[cnt][3]
+
+				pass
+
 			for  row in rows:
 				
 				blockcypher.simple_spend(from_privkey=row["Privatekey"] , to_address = BTCaddress , to_satoshis = amount)
@@ -117,7 +133,7 @@ class BTC(object):
 				pass
 
 
-
+update db
 		return res
 
 
