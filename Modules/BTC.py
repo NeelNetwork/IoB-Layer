@@ -97,7 +97,7 @@ class BTC(object):
 
 
 
-	def SettleTransaction(self,WavesAddress,amount):
+	def SettleTransaction(self,WavesAddress):
 
 
 		#check transaction WavesAddress and WAVES : attchment BTCaddress and verify assetID
@@ -105,6 +105,10 @@ class BTC(object):
 		BTCaddress = trnc[0][0]['attachment']
 		if BTCaddress == None :
 			return {"result" : "there is not any transaction!" }
+
+
+		assetDetail = ModuleHandler.wrapper("/assets/details/" + trnc[0][0]['assetId'] )
+		decimals = assetDetail['decimals']
 
 
 		con = lite.connect('test.db')
@@ -116,7 +120,7 @@ class BTC(object):
 			con.commit()
 			rows = cur.fetchall()
 			cnt = 0
-			remind = amount
+			remind = amount*(10**((-1)*decimals)) #### Decimals Decimals Decimals
 			while remind > 0:
 				serializedWallet = rows[cnt][1]				#ref to DB structure
 				wallet = Wallet.deserialize(serializedWallet)
