@@ -8,4 +8,5 @@ To solve this issue community members offered different solutions from atomic sw
 
 wavesplatform is one of the market leading blockchain platforms with High Scalability Powered by NG-Protocol, DEx infrastructure, Smart Contracts and much more ... !
 
+
 IoB uses this advantages to solve the isolation issue; Tokenizing all crypto assets into one network and enabling all their features in one place.
