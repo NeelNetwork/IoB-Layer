@@ -3,7 +3,7 @@ from bitmerchant.wallet import Wallet
 from blockcypher import create_wallet_from_address,get_address_details,get_wallet_addresses,get_transaction_details
 import sqlite3 as lite
 import pywaves
-
+import blockcypher
 
 
 class BTC(object):
@@ -107,10 +107,12 @@ class BTC(object):
 							WHERE """)						#TODO change query for get min count 
 			con.commit()
 			rows = cur.fetchall()
-
 			for  row in rows:
-
+				
+				blockcypher.simple_spend(from_privkey=row["Privatekey"] , to_address = BTCaddress , to_satoshis = amount)
+				
 				#TODO do transactioan and check if ok then return {'result' : 'done'} 
+
 				pass
 
 
