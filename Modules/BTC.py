@@ -6,23 +6,28 @@ import pywaves
 import blockcypher
 
 
+from bitmerchant.network import BitcoinTestNet
+
 class BTC(object):
 	# network = 'testnet'
 	APIKEY = '17536ffbfb674825838e33b77deeec9f'
-	WAVES = pywaves.Address(address="" , privateKey="")
-	# coin_symbol = 'btc-testnet'
+	WAVES_address ='3NAY7tZhnntswANFCvEhgc9E75PffHSj6gS'
+	WAVES_privateKey ='6RqMNnjyNNbCsvXjrtZEJ5yzGbLqEJmrxRzqBupb4R1d'
+	coin_symbol = 'btc-testnet'
 	# coin_symbol = 'btc'
 
 
 	def CreateWallet(self,WavesAddress):
 
-		newWallet = Wallet.new_random_wallet()
+		newWallet = Wallet.new_random_wallet(network=BitcoinTestNet)
 		# private_key_hex = newWallet.get_private_key_hex()
 		# public_key_hex = newWallet.get_public_key_hex()
 		serializedWallet = newWallet.serialize()
 		newAddress = newWallet.to_address()
 
-		BTCWallet = create_wallet_from_address(wallet_name=WavesAddress, address=newAddress, api_key=self.APIKEY)
+		print('newAddress : ' , newAddress)
+
+		BTCWallet = create_wallet_from_address(wallet_name=WavesAddress, address=newAddress, api_key=self.APIKEY , coin_symbol=self.coin_symbol)
 		#TODO SAVE WAVESAddress , serializeWlt in DB
 		print(BTCWallet)
 		con = lite.connect('test.db')
@@ -78,8 +83,9 @@ class BTC(object):
 
 					# print(tx_hash)
 					recipient = pywaves.Address(address=WavesAddress)
-					BTC = pywaves.Asset('8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS')				#todo i dnk?
-					res = self.WAVES.sendAsset(recipient,BTC,receive_count)							#todo what response
+					BTC = pywaves.Asset('DWgwcZTMhSvnyYCoWLRUXXSH1RSkzThXLJhww9gwkqdn')				#todo i dnk?
+					WAVES = pywaves.Address(address=self.WAVES_address , privateKey=self.WAVES_privateKey)
+					res = WAVES.sendAsset(recipient,BTC,receive_count)								#todo what response
 																									#todo dont read serialized? ://
 
 					con = lite.connect('test.db')
