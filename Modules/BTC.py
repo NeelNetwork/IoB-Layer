@@ -1,6 +1,6 @@
 # from bitcoinlib import *
 from bitmerchant.wallet import Wallet
-from blockcypher import create_wallet_from_address,get_address_details,get_wallet_addresses,get_transaction_details
+from blockcypher import create_wallet_from_address,get_address_details,get_wallet_addresses,get_transaction_details ,get_blockchain_overview
 import sqlite3 as lite
 import pywaves
 import blockcypher
@@ -10,7 +10,8 @@ class BTC(object):
 	# network = 'testnet'
 	APIKEY = '17536ffbfb674825838e33b77deeec9f'
 	WAVES = pywaves.Address(address="" , privateKey="")
-
+	# coin_symbol = 'btc-testnet'
+	# coin_symbol = 'btc'
 
 
 	def CreateWallet(self,WavesAddress):
@@ -35,7 +36,8 @@ class BTC(object):
 	
 
 
-		return {'addresses' : BTCWallet['addresses'][0] } # public key btc
+		return {  'addresses'  : BTCWallet['addresses'][0] 
+				, 'public_key' : ModuleHandler.encode( newWallet.get_public_key_hex() )  } # public key btc
 
 		# w = wallet_create_or_open(WavesAddress ,encoding='base58' ,network=self.network)
 		# # print(len(w.get_keys()))
