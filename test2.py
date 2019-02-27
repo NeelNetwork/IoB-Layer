@@ -49,27 +49,39 @@
 #   ]
 # ]
 
-import requests
+# import requests
 
-OFFLINE = False
-NODE = 'https://nodes.wavesnodes.com'
+# OFFLINE = False
+# NODE = 'https://nodes.wavesnodes.com'
 
-def wrapper(api, postData='', host='', headers=''):
-    global OFFLINE
-    if OFFLINE:
-        offlineTx = {}
-        offlineTx['api-type'] = 'POST' if postData else 'GET'
-        offlineTx['api-endpoint'] = api
-        offlineTx['api-data'] = postData
-        return offlineTx
-    if not host:
-        host = NODE
-    if postData:
-        req = requests.post('%s%s' % (host, api), data=postData, headers={'content-type': 'application/json'}).json()
-    else:
-        req = requests.get('%s%s' % (host, api), headers=headers).json()
-    return req
+# def wrapper(api, postData='', host='', headers=''):
+#     global OFFLINE
+#     if OFFLINE:
+#         offlineTx = {}
+#         offlineTx['api-type'] = 'POST' if postData else 'GET'
+#         offlineTx['api-endpoint'] = api
+#         offlineTx['api-data'] = postData
+#         return offlineTx
+#     if not host:
+#         host = NODE
+#     if postData:
+#         req = requests.post('%s%s' % (host, api), data=postData, headers={'content-type': 'application/json'}).json()
+#     else:
+#         req = requests.get('%s%s' % (host, api), headers=headers).json()
+#     return req
 
-s = wrapper("/transactions/address/3P9o3ZYwtHkaU1KxsKkFjJqJKS3dLHLC9oF/limit/1")
+# s = wrapper("/transactions/address/3P9o3ZYwtHkaU1KxsKkFjJqJKS3dLHLC9oF/limit/1")
 
-print (s[0][0]['attachment'])
+# print (s[0][0]['attachment'])
+import sqlite3 as lite
+
+con = lite.connect('test.db')
+with con:
+  cur = con.cursor()
+  # cur.execute("CREATE TABLE IF NOT EXISTS addressid(id INTEGER PRIMARY KEY AUTOINCREMENT, WavesAddress TEXT  NOT NULL )")
+  # cur.execute("""INSERT INTO addressid (WavesAddress) VALUES(?)""",(WavesAddress,))
+  cur.execute("""SELECT * FROM addressid """)
+  con.commit()
+  row = cur.fetchall()
+
+  print(row)
