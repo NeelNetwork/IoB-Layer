@@ -119,20 +119,19 @@ class BTC(object):
 				_wallet = get_wallet_addresses(wallet_name='Noay'+ str(row[0]), api_key=self.APIKEY , coin_symbol=self.coin_symbol)
 				print('_wallet',_wallet)
 				txrefs = []
-				try:
-					details = get_address_details(_wallet['addresses'][0])
-					print(details)
-					txrefs = details['txrefs']
-				except Exception as e:
-					print("can not get_address_details ")
+				details = get_address_details(_wallet['addresses'][0], coin_symbol=self.coin_symbol)
+				print(details)
+				txrefs = details['txrefs']
 				print(len(txrefs))
+
+
 				if len(txrefs) == 0 :
 					return {"result" : "not exist any transaction"} 
 				else :
 					tx_hash = txrefs[0]['tx_hash']													#TODO should be check transaction time
-					transaction_details = get_transaction_details(tx_hash)
+					transaction_details = get_transaction_details(tx_hash , coin_symbol=self.coin_symbol)
 					print('transaction_details' , transaction_details)
-					receive_count = transaction_details['receive_count']
+					receive_count = transaction_details['outputs'][-1]['value'] * (10** ((-1) * 8))
 
 					# print(tx_hash)
 					pywaves.setNode(node = self.TESTNET_NODE , chain = self.CHAIN)

@@ -111,6 +111,34 @@ TESTNET_NODE = 'https://testnode1.wavesnodes.com'
 #   # print(row)
 from blockcypher import create_wallet_from_address,get_address_details,get_wallet_addresses,get_transaction_details ,get_blockchain_overview
 
-for i in range(1,11) : 
-  _wallet = get_wallet_addresses(wallet_name='Noay'+ str(i), api_key=APIKEY , coin_symbol=coin_symbol)
-  print('_wallet',_wallet)
+# for i in range(1,11) : 
+#   _wallet = get_wallet_addresses(wallet_name='Noay'+ str(i), api_key=APIKEY , coin_symbol=coin_symbol)
+#   print('_wallet',_wallet)
+
+
+details = get_address_details('mkBPyZ5V25kzzJkQZg5EzQVeVduonrpqNU' , coin_symbol=coin_symbol)
+print(details)
+
+
+{'confirmations': 21, 'preference': 'high', 'total': 16163340269, 'fees': 16922, 
+'hash': 'f20d44c267889206f8735a2ff57b84d549beb07bc18c3c7c22c7f947debfd666', 'lock_time': 1482213, 
+'outputs': [{'value': 16152611376, 'script_type': 'pay-to-script-hash', 
+            'spent_by': 'fa9c639299a960b543e3dbb38bec505d45ff60f8d3a995932e82f7ef570d47b5', 
+            'script': 'a914ff86b9a980517a61237460dc86f3fffa565eae8a87', 
+            'addresses': ['2NGYKh5HTaaeRu3mVnMEM5cP4cMLZjP21VK']}, 
+
+            {'value': 10728893, 'script_type': 'pay-to-pubkey-hash', 'script': '76a9143325bf43d852dfcd57deea0afeab7957152f3c0d88ac', 
+                                'addresses': ['mkBPyZ5V25kzzJkQZg5EzQVeVduonrpqNU']}]
+
+, 'block_height': 1482214, 'vin_sz': 1,
+'received': datetime.datetime(2019, 2, 28, 12, 15, 36, 580000, tzinfo=tzutc()),
+'addresses': ['2N4BEpd3Yc5fpAk4P3dxNWqgJ8dduFPuruc', '2NGYKh5HTaaeRu3mVnMEM5cP4cMLZjP21VK', 'mkBPyZ5V25kzzJkQZg5EzQVeVduonrpqNU'], 
+'vout_sz': 2, 'inputs': [{'script_type': 'pay-to-script-hash', 'sequence': 4294967294, 
+'script': '160014f9b555e618377bfd41aae33727ac10816780981f', 'prev_hash': 'c6459b5557df44aaf8e31e566d5bb61356102b8a021bc699d76ea20ade8df123',
+'output_index': 0,
+'witness': ['3045022100827ed890c20a2cce1171b91a097a5fab9f447a5ba2f31ee6ce3aae3cbfee4487022013ae0c123be0fcd1cba43ef105f23d7180f218cf8acb30196bb46b18113ff27c01', 
+'028b5c1b9177aaf40302e1cac59aa3f45c58e93ba2921ccaab757f243fbee235b2'], 'age': 1482212, 'output_value': 16163357191, 
+'addresses': ['2N4BEpd3Yc5fpAk4P3dxNWqgJ8dduFPuruc']}], 'size': 140, 'confidence': 1, 
+'block_hash': '0000000000000001d9b9730df267cb2e85bae7fc70c7fe85c833ea9975c8946f', 
+'confirmed': datetime.datetime(2019, 2, 28, 12, 17, 13, tzinfo=tzutc()), 'block_index': 4, 
+'ver': 2, 'relayed_by': '5.9.144.44:18333', 'double_spend': False}
