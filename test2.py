@@ -73,15 +73,30 @@
 # s = wrapper("/transactions/address/3P9o3ZYwtHkaU1KxsKkFjJqJKS3dLHLC9oF/limit/1")
 
 # print (s[0][0]['attachment'])
+from bitmerchant.wallet import Wallet
+from bitmerchant.network import BitcoinTestNet
+
 import sqlite3 as lite
+
+import ModuleHandler
+
 
 con = lite.connect('test.db')
 with con:
   cur = con.cursor()
   # cur.execute("CREATE TABLE IF NOT EXISTS addressid(id INTEGER PRIMARY KEY AUTOINCREMENT, WavesAddress TEXT  NOT NULL )")
   # cur.execute("""INSERT INTO addressid (WavesAddress) VALUES(?)""",(WavesAddress,))
-  cur.execute("""SELECT * FROM addressid """)
-  con.commit()
-  row = cur.fetchall()
+  # cur.execute("""SELECT * FROM addressid """)
+  cur.execute("SELECT * FROM  addresses")
 
-  print(row)
+  con.commit()
+  rows = cur.fetchall()
+
+  for row in rows:
+    # wallet = Wallet.deserialize(row[1])
+    wallet = Wallet.deserialize(row[1] ,  network=BitcoinTestNet)
+    print(row[1])
+    print('private  : ', ModuleHandler.encode(wallet.get_private_key_hex()))
+    print('public  : ', ModuleHandler.encode(wallet.get_public_key_hex()))
+  # print(row)
+

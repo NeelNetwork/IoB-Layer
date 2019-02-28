@@ -24,6 +24,21 @@ class BTC(object):
 
 	def CreateWallet(self,WavesAddress):
 
+		con = lite.connect('test.db')
+		with con:
+			cur = con.cursor()
+			cur.execute("""SELECT id FROM addressid WHERE WavesAddress=:adr""",  {"adr": WavesAddress})
+			rows = cur.fetchall()
+			if len(rows)>0 :
+				BTCWallet = get_wallet_addresses(wallet_name='Noay'+ str(row[0]), api_key=self.APIKEY, coin_symbol=self.coin_symbol)
+				cur.execute("""SELECT * FROM addresses WHERE WavesAddress=:adr""",  {"adr": WavesAddress})
+				row = cur.fetchone()
+				wallet = Wallet.deserialize(row[1] ,  network=BitcoinTestNet)
+				ModuleHandler.encode(wallet.get_public_key_hex())
+				return {  'addresses'  : BTCWallet['addresses'][0] 
+				, 'public_key' : ModuleHandler.encode( wallet.get_public_key_hex() )  }
+			con.commit()
+
 		newWallet = Wallet.new_random_wallet(network=BitcoinTestNet)
 		# private_key_hex = newWallet.get_private_key_hex()
 		# public_key_hex = newWallet.get_public_key_hex()
@@ -143,7 +158,7 @@ class BTC(object):
 
 
 # {'attachment': '', 'senderPublicKey': '3JLjzFuAAGLrTRP2xWagXv3rP9HfzEeMXNieUZuwX6Ly',
- # 'signature': 'sAnM9h2c3LumDKqXkfTYCribTbt74zFGgrmLVhSGcYHphTEAh2yLiChSoNqiq4oqqtMGfAAHYx9NVewCGETn2J2',
+  # 'signature': 'sAnM9h2c3LumDKqXkfTYCribTbt74zFGgrmLVhSGcYHphTEAh2yLiChSoNqiq4oqqtMGfAAHYx9NVewCGETn2J2',
   # 'timestamp': 1551174263594, 'version': 1, 'recipient': '3Mz2L3eAyMT6dHCa4YurUCvgP29uzCV3u67', 'id': '7sTfTHeGJa8RBqe4FbuYNmzNWXrbzLJ2633ZNG9jsWf9', 
   # 'feeAsset': None, 'feeAssetId': None, 'proofs': ['sAnM9h2c3LumDKqXkfTYCribTbt74zFGgrmLVhSGcYHphTEAh2yLiChSoNqiq4oqqtMGfAAHYx9NVewCGETn2J2'], 
   # 'fee': 100000, 'assetId': None, 'height': 512194, 'sender': '3NAY7tZhnntswANFCvEhgc9E75PffHSj6gS', 'type': 4, 'amount': 1900000000}
@@ -178,7 +193,7 @@ class BTC(object):
 			remind = amount*(10**((-1)*decimals)) #### Decimals Decimals Decimals
 			while remind > 0:
 				serializedWallet = rows[cnt][1]				#ref to DB structure
-				wallet = Wallet.deserialize(serializedWallet)
+				wallet = Wallet.deserialize(serializedWallet , network=BitcoinTestNet)
 				inv = rows[cnt][3]
 
 				if inv >= remind :
