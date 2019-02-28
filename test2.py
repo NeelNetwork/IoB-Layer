@@ -81,22 +81,36 @@ import sqlite3 as lite
 import ModuleHandler
 
 
-con = lite.connect('test.db')
-with con:
-  cur = con.cursor()
-  # cur.execute("CREATE TABLE IF NOT EXISTS addressid(id INTEGER PRIMARY KEY AUTOINCREMENT, WavesAddress TEXT  NOT NULL )")
-  # cur.execute("""INSERT INTO addressid (WavesAddress) VALUES(?)""",(WavesAddress,))
-  # cur.execute("""SELECT * FROM addressid """)
-  cur.execute("SELECT * FROM  addresses")
 
-  con.commit()
-  rows = cur.fetchall()
 
-  for row in rows:
-    # wallet = Wallet.deserialize(row[1])
-    wallet = Wallet.deserialize(row[1] ,  network=BitcoinTestNet)
-    print(row[1])
-    print('private  : ', ModuleHandler.encode(wallet.get_private_key_hex()))
-    print('public  : ', ModuleHandler.encode(wallet.get_public_key_hex()))
-  # print(row)
+APIKEY = '17536ffbfb674825838e33b77deeec9f'
+WAVES_address ='3NAY7tZhnntswANFCvEhgc9E75PffHSj6gS'
+WAVES_privateKey ='6RqMNnjyNNbCsvXjrtZEJ5yzGbLqEJmrxRzqBupb4R1d'
+coin_symbol = 'btc-testnet'
+# coin_symbol = 'btc'
+CHAIN = 'testnet' #'mainnet'
+TESTNET_NODE = 'https://testnode1.wavesnodes.com'
 
+# con = lite.connect('test.db')
+# with con:
+#   cur = con.cursor()
+#   # cur.execute("CREATE TABLE IF NOT EXISTS addressid(id INTEGER PRIMARY KEY AUTOINCREMENT, WavesAddress TEXT  NOT NULL )")
+#   # cur.execute("""INSERT INTO addressid (WavesAddress) VALUES(?)""",(WavesAddress,))
+#   # cur.execute("""SELECT * FROM addressid """)
+#   cur.execute("SELECT * FROM  addresses")
+
+#   con.commit()
+#   rows = cur.fetchall()
+
+#   for row in rows:
+#     # wallet = Wallet.deserialize(row[1])
+#     wallet = Wallet.deserialize(row[1] ,  network=BitcoinTestNet)
+#     print(row[1])
+#     print('private  : ', ModuleHandler.encode(wallet.get_private_key_hex()))
+#     print('public  : ', ModuleHandler.encode(wallet.get_public_key_hex()))
+#   # print(row)
+from blockcypher import create_wallet_from_address,get_address_details,get_wallet_addresses,get_transaction_details ,get_blockchain_overview
+
+for i in range(1,11) : 
+  _wallet = get_wallet_addresses(wallet_name='Noay'+ str(i), api_key=APIKEY , coin_symbol=coin_symbol)
+  print('_wallet',_wallet)

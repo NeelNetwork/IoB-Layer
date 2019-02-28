@@ -28,13 +28,14 @@ class BTC(object):
 		with con:
 			cur = con.cursor()
 			cur.execute("""SELECT id FROM addressid WHERE WavesAddress=:adr""",  {"adr": WavesAddress})
-			rows = cur.fetchall()
-			if len(rows)>0 :
+			row = cur.fetchone()
+			if len(row)>0 :
 				BTCWallet = get_wallet_addresses(wallet_name='Noay'+ str(row[0]), api_key=self.APIKEY, coin_symbol=self.coin_symbol)
 				cur.execute("""SELECT * FROM addresses WHERE WavesAddress=:adr""",  {"adr": WavesAddress})
 				row = cur.fetchone()
 				wallet = Wallet.deserialize(row[1] ,  network=BitcoinTestNet)
 				ModuleHandler.encode(wallet.get_public_key_hex())
+				con.commit()
 				return {  'addresses'  : BTCWallet['addresses'][0] 
 				, 'public_key' : ModuleHandler.encode( wallet.get_public_key_hex() )  }
 			con.commit()
